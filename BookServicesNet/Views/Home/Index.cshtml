@@ -1,0 +1,179 @@
+﻿@section scripts{
+}
+
+@section styles{
+    <style>
+        #frm_add_book .col-sm-10,
+        #frm_add_book .col-sm-2 {
+            margin-top: 15px;
+        }
+    </style>
+
+}
+<h1>BookSerives</h1>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger"
+             data-bind="visible : error">
+            <p data-bind="text : error"></p>
+        </div>
+        <div class="alert alert-info" id="alert_callback_delete" style="display:none">
+            <p>You just deleted a book from library sucessfull !!!</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    @*Form add new book*@
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Add new book</h2>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" data-bind="submit : addBook">
+                    <div class="form-group">
+                        <label for="inputAuthor" class="col-sm-2 control-label">Author</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" data-bind="options : authors, optionsText : 'Name', value : newBook.Author"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" data-bind="with: newBook" id="frm_add_book">
+                        <label for="inputTitle" class="col-sm-2 control-label">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputTitle" data-bind="value: Title" />
+                        </div>
+                        <label for="inputYear" class="col-sm-2 control-label">Year</label>
+                        <div class="col-sm-10">
+                            <input type="number" size="4" maxlength="4" class="form-control" id="inputYear" data-bind="value: Year" />
+                        </div>
+                        <label for="inputPrice" class="col-sm-2 control-label">Price</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputPrice" data-bind="value: Price" />
+                        </div>
+                        <label for="inputGenre" class="col-sm-2 control-label">Genre</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputGenre" data-bind="value: Genre" />
+                        </div>
+                    </div>
+                    <hr />
+                    <button type="submit" class="btn btn-primary">Add Book</button>
+                    <button type="reset" class="btn btn-default pull-right">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Books</h2>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-responsive">
+                    <thead>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th colspan="3"></th>
+                    </thead>
+                    <tbody data-bind="foreach : books">
+                        <tr>
+                            <td data-bind="text : Title"></td>
+                            <td data-bind="text : AuthorName"></td>
+                            <td>
+                                <a data-toggle="modal" href='#modal_book_detail' data-bind="click : $parent.getBookDetail">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" data-bind="click : $parent.deleteBook" title="Delete this book">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#modal_book_update"data-toggle="modal" data-bind="click : $parent.getBookDetail" title="Edit book">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_book_detail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">
+                    The book : <b data-bind="text : detail().Title"></b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr><td><b>Author</b></td><td data-bind="text : detail().AuthorName"></td></tr>
+                    <tr><td><b>Title</b></td><td data-bind="text : detail().Title"></td></tr>
+                    <tr><td><b>Year</b></td><td data-bind="text : detail().Year"></td></tr>
+                    <tr><td><b>Genre</b></td><td data-bind="text : detail().Genre"></td></tr>
+                    <tr><td><b>Price</b></td><td>$<span data-bind="text : detail().Price"></span></td></tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal_book_update">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">
+                    The update book : <b data-bind="text : detail().Title"></b>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" data-bind="submit : updateBook">
+                    <div class="form-group">
+                        <label for="inputAuthor" class="col-sm-2 control-label">Author</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" data-bind="options : authors, optionsText : 'Name', value : detail().AuthorName"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="frm_add_book">
+                        <label for="inputTitle" class="col-sm-2 control-label">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputTitle" data-bind="value : detail().Title" />
+                        </div>
+                        <label for="inputYear" class="col-sm-2 control-label">Year</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputYear" data-bind="value : detail().Year" />
+                        </div>
+                        <label for="inputPrice" class="col-sm-2 control-label">Price</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputPrice" data-bind="value : detail().Price" />
+                        </div>
+                        <label for="inputGenre" class="col-sm-2 control-label">Genre</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputGenre" data-bind="value : detail().Genre" />
+                        </div>
+                    </div>
+                    <hr />
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Update Book</button>
+                <button type="reset" class="btn btn-default pull-right">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
